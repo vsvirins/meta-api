@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  mongo:
+    container_name: MA_mongo
+    image: mongo
+    restart: always
+    command: mongod --quiet
+    env_file:
+      - mongo-variables.env
+
+  mongo-express:
+    container_name: MA_mongo-express
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongo
+    env_file:
+      - mongo-variables.env
