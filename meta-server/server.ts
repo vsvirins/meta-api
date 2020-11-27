@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import morgan from 'morgan';
+import auth from './routes/auth';
 
 // Configs and middleware
 const app = express();
@@ -11,6 +12,7 @@ app.use(cors());
 const PORT = 8000; //os.getenv('PORT')
 
 // Routes
+app.use('/auth', auth);
 app.get('/', (req, res) => res.send('hello from ts'));
 
 // Connect to DB and start the server
