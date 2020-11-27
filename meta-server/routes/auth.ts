@@ -15,5 +15,7 @@ router.get('/github', (req, res) => {
   res.status(200).send('logging in with github');
 });
 
+console.log('hello!');
+
 // Callback
 export default router;
