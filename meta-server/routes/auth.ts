@@ -1,5 +1,7 @@
 import Router from 'express';
+import jsonwebtoken from 'jsonwebtoken';
 import passport from 'passport';
+
 const router = Router();
 
 /***
@@ -38,13 +40,23 @@ router.get('/github', passport.authenticate('github', {scope: ['user:email']}));
  *
  * @todo
  * Return a JWT cookie to the user.
+ * Function to check if user exists/create a new user.
  */
 router.get(
   '/github/callback',
   passport.authenticate('github', {failureRedirect: '/login'}),
   (req, res) => {
-    res.sendStatus(200);
+    // User.findOrCreate()
+    const user = {id: 'uniqueMongoId'};
+
+    const JWT = jsonwebtoken.sign(user.id, process.env.JWT_SECRET!);
+    res.json({jwt: JWT});
   }
 );
+
+router.post('/testjwt', passport.authenticate('jwt', {session: false}), (req, res) => {
+  console.log(req.body);
+  res.send('Signed in');
+});
 
 export default router;

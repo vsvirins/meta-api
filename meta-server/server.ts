@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import morgan from 'morgan';
 import passport from 'passport';
-import {passportSetup} from './auth/passport';
+import passportSetup from './auth/passport';
 import auth from './routes/auth';
 
 /**
@@ -21,7 +21,7 @@ const PORT = process.env.PORT || 8000;
  * @Configs
  */
 const app = express();
-passportSetup();
+passportSetup.init();
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cors());

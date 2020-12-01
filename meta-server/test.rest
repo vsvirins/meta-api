@@ -1,0 +1,7 @@
+POST http://localhost:8000/auth/testjwt
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.dW5pcXVlTW9uZ29JZA.ZLczmoUQ46A4Joq3Lcqde8pzVtWZQo28FZ80kBOHJXE
+Content-Type: application/json
+
+{
+    "user":"viktor"
+}
