@@ -1,7 +1,17 @@
 POST http://localhost:8000/auth/testjwt
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.dW5pcXVlTW9uZ29JZA.ZLczmoUQ46A4Joq3Lcqde8pzVtWZQo28FZ80kBOHJXE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQiLCJpYXQiOjE2MDcwMDE3NDIsImV4cCI6MTYwNzAwMjY0Mn0.DKLM1IwCXQyf2iqzLkPa5GG97SSxSeJmKzdRRVWkXsU
 Content-Type: application/json
 
 {
-    "user":"viktor"
+     "id":"1234",
+    "refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQiLCJpYXQiOjE2MDcwODU0NzgsImV4cCI6MTYwOTY3NzQ3OH0.i4upCDJKqJwyDdOY9oFKLFbxBeS51JQ1jXyjCYQfHrI"
+}
+
+###
+
+DELETE http://localhost:8000/auth/logout
+Content-Type: application/json
+
+{
+    "id":"1234"
 }

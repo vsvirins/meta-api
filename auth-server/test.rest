@@ -1,0 +1,26 @@
+POST http://localhost:9090/login
+Content-Type: application/json
+
+
+{
+    "id":"4322"
+}
+
+###
+
+POST http://localhost:9090/token
+Content-Type: application/json
+
+{
+    "id":"4322",
+    "refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQzMjIiLCJpYXQiOjE2MDY5NDMyNjMsImV4cCI6MTYwOTUzNTI2M30.-ZVGrRm_NsbU5v1D1b3gDGurVqY9DWcob4i3yREX5DY"
+}
+
+###
+
+DELETE http://localhost:9090/logout
+Content-Type: application/json
+
+{
+    "id":"4322"
+}

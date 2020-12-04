@@ -1,11 +1,9 @@
 import passport from 'passport';
 import gitHubStrategy from './gitHubStrategy';
-import jwtStrategy from './jwtStrategy';
 
 const passportSetup = {
   // Initilizes the passport strategies.
   init: () => {
-    jwtStrategy.init();
     gitHubStrategy.init();
   },
 };

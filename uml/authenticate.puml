@@ -1,0 +1,35 @@
+@startuml authentication-sequence
+hide footbox
+title Authentication sequence
+
+actor Client
+participant Server
+participant Auth_Server
+
+' Authenticate Sequence
+
+Client -> Server: request(user.id, accessToken, refreshToken)
+note left: Client request\nto protected asset.
+activate Server
+Server -> Server: verify(accessToken)
+Server -> Server: compare(accessToken.id, user.id)
+Server --> Client: response(protectedAsset)
+note left: If the access token is valid,\nthe request is granted.
+deactivate Server
+
+Server -> Auth_Server: post(/token) request(user.id, refreshToken)
+activate Server
+note left: If the access token has expired,\nrequest the auth server for a new.
+activate Auth_Server
+Auth_Server -> Auth_Server: checkIfUserExsists(user.id)
+Auth_Server -> Auth_Server: checkIfIdAndRefreshTokenMatch(user.id, refreshToken)
+Auth_Server -> Auth_Server: verifyRefreshToken(user.id, refreshToken)
+Auth_Server -> Auth_Server: createAccessToken(user.id)
+Auth_Server --> Server: response(accessToken)
+deactivate Auth_Server
+
+Server -> Client: response(accessToken)
+note left: Store the renewed\naccess token.
+deactivate Server
+
+@enduml

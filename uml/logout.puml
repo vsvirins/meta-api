@@ -1,0 +1,27 @@
+@startuml logout-sequense
+hide footbox
+title Logout sequence
+
+actor Client
+participant Server
+participant Auth_Server
+
+' Logout Sequence
+
+Client -> Server: delete(/logout) request(user.id)
+note left: Client sends an\nauthenticated logout request.
+
+activate Server
+Server -> Auth_Server: delete(/logout) request(user.id)
+note left: Request is passed on\nto the auth server.
+
+activate Auth_Server
+Auth_Server -> Auth_Server: deleteRefreshToken(user.id)
+Auth_Server --> Server: refreshToken deleted
+note right: Destroying the refresh token\nis a security messure,\nrendering compromised\ntokens unsuseable.
+deactivate Auth_Server
+
+Server -> Client: redirect(/)
+deactivate Server
+note left: Signed out.
+@enduml

@@ -1,0 +1,40 @@
+@startuml Login-sequense
+hide footbox
+title Login sequense
+
+actor Client
+participant Server
+participant GitHub
+participant Auth_Server
+
+' Login Sequence
+
+activate Server
+Client -> Server: get(auth/github)
+note left: Client makes a\nlogin with github request\nto the server.\nNo sensitive user data\nis required.
+Server -> GitHub: OAuth request(clientId, clientSecret, callbackUrl)
+
+activate GitHub
+GitHub -> GitHub: Verify client
+GitHub -> GitHub: User consent
+GitHub --> Server: OAuth response(user) redirect(callbackUrl)
+note left: Redirects to the callbackUrl\nprovided in the request.\nReturns the user profile\nfrom the OAuth provider.
+deactivate GitHub
+Server -> Server: User.findOrCreate(user)
+note left: Check if the user exsists,\notherwise create a new.
+
+Server -> Auth_Server: post(/login) request(user.id)
+note left: Creates a new request to the\nauth server to generate tokens.
+
+activate Auth_Server
+Auth_Server -> Auth_Server: createTokens(user.id)
+Auth_Server -> Auth_Server: storeRefreshToken(user.id, refreshToken)
+Auth_Server --> Server: response(accessToken, refreshToken)
+note right: Handles the token request and\nstores the hashed refresh token\ntied to the user.  
+deactivate Auth_Server
+
+Server --> Client: response(accessToken, refreshToken)
+note left: Client stores the accessToken\nand refreshToken.
+deactivate Server
+
+@enduml
