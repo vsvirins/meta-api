@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import * as jwt from 'jsonwebtoken';
-import Crypto from '../../controllers/Crypto';
+import Crypto from '../../modules/Crypto';
 import Token from '../models/Token';
 dotenv.config();
 const crypto = new Crypto();
