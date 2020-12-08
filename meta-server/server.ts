@@ -18,7 +18,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(cors());
 
-const PORT = 8000; //os.getenv('PORT')
+const PORT = process.env.PORT || 8080
 
 // Routes
 app.use('/:user_name/projects', paramsHack, projectRoutes)
