@@ -8,7 +8,7 @@ import projectRoutes from './routes/projectRoutes'
 import paramsHack from './middleware/paramsHack';
 
 // Configs and middleware
-connect('mongodb://localhost:27017/test', {
+connect(process.env.DB_HOST || 'mongodb://localhost:27017/meta-api', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })

@@ -1,7 +1,7 @@
 import express from "express"
 import ProjectModel from '../models/ProjectModel'
 
-import { API_VERSION as apiv } from '../config/Constants'
+const apiv = process.env.API_VERSION || '0.1'
 
 class ProjectController {
   create(req: express.Request, res: express.Response): void {
@@ -206,7 +206,7 @@ class ProjectController {
             if (err) {
               throw(err)
             }
-            
+
             res.status(200).send({
               "data": {
                 "project_name": `${project_name}`,
