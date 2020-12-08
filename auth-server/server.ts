@@ -1,6 +1,7 @@
 import cors from 'cors';
 import dotenvt from 'dotenv';
 import express from 'express';
+import {connect} from 'mongoose';
 import morgan from 'morgan';
 import ipFilter from './middleware/ipFilter';
 import router from './router';
@@ -11,7 +12,8 @@ dotenvt.config();
 /**
  * @Constants
  */
-const PORT = parseInt(process.env.PORT!) | 9090;
+const PORT = parseInt(process.env.PORT!) || 9090;
+const DB_URI = process.env.DB_URI || 'mongodb://mongo:27017/auth';
 
 /**
  * @Configs
@@ -31,6 +33,13 @@ app.use('/', router);
 /***
  * @Run
  */
-app.listen(PORT, () => {
-  console.log(`⚡️[auth-server] Listening on port ${PORT}`);
-});
+connect(DB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(() =>
+    app.listen(PORT, () => {
+      console.log(`⚡️[auth-server] Listening on port ${PORT}`);
+    })
+  )
+  .catch(err => console.error(err));
