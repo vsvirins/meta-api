@@ -1,19 +1,30 @@
-import cors from 'cors';
-import express from 'express';
-import morgan from 'morgan';
-import auth from './routes/auth';
+import cors from 'cors'
+import express from 'express'
+import morgan from 'morgan'
+
+import { connect } from 'mongoose'
+
+import projectRoutes from './routes/projectRoutes'
+import paramsHack from './middleware/paramsHack'
 
 // Configs and middleware
-const app = express();
-app.use(morgan('dev'));
-app.use(express.json());
-app.use(cors());
+connect(process.env.DB_URI || 'mongodb://localhost:27017/meta-api', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => {
+  const app = express()
+  app.use(morgan('dev'))
+  app.use(express.json())
+  app.use(cors())
 
-const PORT = 8000; //os.getenv('PORT')
+  const PORT = process.env.PORT || 8080
 
-// Routes
-app.use('/auth', auth);
-app.get('/', (req, res) => res.send('hello from ts'));
+  // Routes
+  app.use('/:user_name/projects', paramsHack, projectRoutes)
+  app.use('/projects', projectRoutes)
 
-// Connect to DB and start the server
-app.listen(PORT, () => console.log(`⚡️[meta-server] Listening on port ${PORT}`));
+  // Connect to DB and start the server
+  app.listen(PORT, () => console.log(`⚡️[meta-server] Listening on port ${PORT}`))
+}).catch(e => {
+  console.error("Couldn't start server. A database error occured while connecting!")
+})
