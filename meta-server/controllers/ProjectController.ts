@@ -1,7 +1,7 @@
 import express from "express"
 import ProjectModel from '../models/ProjectModel'
 
-const apiv = process.env.API_VERSION || '0.1'
+const apiv = process.env.API_VERSION || 'latest'
 
 class ProjectController {
   create(req: express.Request, res: express.Response): void {
