@@ -29,40 +29,40 @@ class ProjectController {
             message: `There is already a project with the name ${project_name} for this user. Please try another project name.`
           }
         })
-      } else {
-        const Project = new ProjectModel(filter)
-        await Project.save()
-
-        return res.status(201).send({
-          "data": {
-            "project_name": `${project_name}`,
-            "_links": [
-              {
-                "method": "GET",
-                "url": `https://metaapi.zerozipzilch.com/${apiv}/generator/${user_name}/projects/`
-              },
-              {
-                "method": "GET",
-                "url": `https://metaapi.zerozipzilch.com/${apiv}/generator/${user_name}/projects/${project_name}`
-              },
-              {
-                "method": "PUT",
-                "url": `https://metaapi.zerozipzilch.com/${apiv}/generator/${user_name}/projects/${project_name}`
-              },
-              {
-                "method": "DELETE",
-                "url": `https://metaapi.zerozipzilch.com/${apiv}/generator/${user_name}/projects/${project_name}`
-              },
-              {
-                "method": "POST",
-                "url": `https://metaapi.zerozipzilch.com/${apiv}/generator/${user_name}/projects/${project_name}/endpoints`
-              },
-            ]
-          },
-          "status": 201,
-          "message": `The project ${project_name} has been successully created for user ${user_name}`
-        })
       }
+      
+      const Project = new ProjectModel({ user_name, project_name, endpoints: [] })
+      await Project.save()
+
+      return res.status(201).send({
+        "data": {
+          "project_name": `${project_name}`,
+          "_links": [
+            {
+              "method": "GET",
+              "url": `https://metaapi.zerozipzilch.com/${apiv}/generator/${user_name}/projects/`
+            },
+            {
+              "method": "GET",
+              "url": `https://metaapi.zerozipzilch.com/${apiv}/generator/${user_name}/projects/${project_name}`
+            },
+            {
+              "method": "PUT",
+              "url": `https://metaapi.zerozipzilch.com/${apiv}/generator/${user_name}/projects/${project_name}`
+            },
+            {
+              "method": "DELETE",
+              "url": `https://metaapi.zerozipzilch.com/${apiv}/generator/${user_name}/projects/${project_name}`
+            },
+            {
+              "method": "POST",
+              "url": `https://metaapi.zerozipzilch.com/${apiv}/generator/${user_name}/projects/${project_name}/endpoints`
+            },
+          ]
+        },
+        "status": 201,
+        "message": `The project ${project_name} has been successully created for user ${user_name}`
+      })
     }
     catch (e) {
       console.error(e)
