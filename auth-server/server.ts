@@ -1,18 +1,18 @@
 import cors from 'cors';
-import dotenvt from 'dotenv';
+//import dotenvt from 'dotenv';
 import express from 'express';
 import {connect} from 'mongoose';
 import morgan from 'morgan';
-import ipFilter from './middleware/ipFilter';
 import router from './router';
 
 //replace with dot_env file in docker-compose
-dotenvt.config();
+// dotenvt.config();
 
 /**
  * @Constants
  */
 const PORT = parseInt(process.env.PORT!) || 9090;
+//const HOST = process.env.HOST || '127.0.0.1';
 const DB_URI = process.env.DB_URI || 'mongodb://mongo:27017/auth';
 
 /**
@@ -23,7 +23,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(morgan('dev'));
-app.use(ipFilter(['::ffff:127.0.0.1']));
+//app.use(ipFilter(['::ffff:127.0.0.1', '172.19.0.2', '::ffff:172.19.0.2']));
 
 /***
  * @Routes

@@ -18,8 +18,9 @@ class TokenRepository {
   }
 
   /**
-   * Create encoded access & refresh tokens with a user id.
-   * @param id id tied to the user.
+   * Create encoded access & refresh tokens tied to the users.
+   * @param id - User id.
+   * @returns - An object containing the access & refresh tokens.
    */
   createTokens(id: string) {
     return {accessToken: this.createAccessToken(id), refreshToken: this.createRefreshToken(id)};
@@ -27,7 +28,8 @@ class TokenRepository {
 
   /**
    * Checks the database if there's a token tied to the user's id.
-   * @param id id tied to the user.
+   * @param id - User id.
+   * @returns - True if the user exsists, otherwise false -duh-
    */
   async checkIfUserExsists(id: string): Promise<boolean> {
     return await Token.exists({id});
@@ -38,16 +40,36 @@ class TokenRepository {
     return await crypto.verify(target!.refreshToken, refreshToken);
   }
 
+  /**
+   * Verifies the refresh token with a secret key.
+   * @param refreshToken - Encrypted refresh token.
+   * @param id - User id.
+   * @callback {@link VerifyCallback}
+   * @throws {@link jwt.NotBeforeError}
+   * @throws {@link jwt.TokenExpiredError}
+   * @returns The decoded token.
+   *
+   * @todo fix links
+   */
   verifyRefreshToken(refreshToken: string, id: string, callback: jwt.VerifyCallback) {
     jwt.verify(refreshToken, this._refreshKey, (err, tokenInfo) => {
       callback(err, tokenInfo);
     });
   }
 
+  /**
+   * Deletes the refresh token tied to the user's id.
+   * @param id - User id.
+   */
   async deleteRefreshToken(id: string) {
     await Token.deleteOne({id});
   }
 
+  /**
+   * Creates a new document in the database with the hashed refresh token tied to the user's id.
+   * @param token User's token.
+   * @param id User's id.
+   */
   async storeRefreshToken(token: string, id: string) {
     const hashedToken = await crypto.hash(token);
     new Token({id, refreshToken: hashedToken}).save();

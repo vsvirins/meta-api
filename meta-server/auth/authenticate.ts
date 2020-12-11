@@ -62,7 +62,7 @@ const authenticate = (req: Request, res: Response, next: NextFunction) => {
 
       if (err) {
         if (err instanceof TokenExpiredError) {
-          const response = await Axios.post('http://localhost:9090/token', {id, refreshToken});
+          const response = await Axios.post('http://auth-server:9090/refresh', {id, refreshToken});
           if (response.status !== 201) return res.sendStatus(response.status);
           req.body.accessToken = response.data;
           next();
@@ -73,6 +73,7 @@ const authenticate = (req: Request, res: Response, next: NextFunction) => {
       req.body.accessToken = accessToken;
       next();
     } catch (error) {
+      console.error(error);
       res.sendStatus(401);
     }
   });

@@ -1,21 +1,22 @@
 import cors from 'cors';
-import dotenv from 'dotenv';
 import express from 'express';
 import morgan from 'morgan';
 import passport from 'passport';
 import passportSetup from './auth/passport';
 import auth from './routes/auth';
 
+// asds
 /**
  * @todo
  * Replace with env_file in docker-compose
  */
-dotenv.config();
+//dotenv.config();
 
 /**
  * @Constants
  */
-const PORT = process.env.PORT || 8000;
+const PORT = parseInt(process.env.PORT!) || 8080;
+const HOST = process.env.HOST || '127.0.0.1';
 
 /**
  * @Configs
@@ -36,4 +37,4 @@ app.get('/', (req, res) => res.send('hello from ts'));
 /***
  * @Run
  */
-app.listen(PORT, () => console.log(`⚡️[meta-server] Listening on port ${PORT}`));
+app.listen(PORT, HOST, () => console.log(`⚡️[meta-server] Listening on port ${PORT}`));

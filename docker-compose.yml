@@ -6,8 +6,8 @@ services:
     image: mongo
     restart: always
     command: mongod --quiet
-    env_file:
-      - mongo-variables.env
+    # env_file:
+    #   - mongo-variables.env
 
   mongo-express:
     container_name: MA_mongo-express
@@ -17,5 +17,27 @@ services:
       - 8081:8081
     depends_on:
       - mongo
+    # env_file:
+    #   - ./.env/mongo-variables.env
+
+  meta-server:
+    container_name: MA_meta-server
+    build: ./meta-server
+    volumes:
+      - ./meta-server:/usr/src/app:z
+    ports:
+      - 8080:8080
     env_file:
-      - mongo-variables.env
+      - ./.env/meta-server.env
+    command: bash -c "npm i && npm run dev"
+
+  auth-server:
+    container_name: MA_auth-server
+    build: ./auth-server
+    volumes:
+      - ./auth-server:/usr/src/app:z
+    ports:
+      - 9090:9090
+    env_file:
+      - ./.env/auth-server.env
+    command: bash -c "npm i && npm run dev"

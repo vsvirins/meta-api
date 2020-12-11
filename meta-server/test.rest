@@ -1,10 +1,11 @@
-POST http://localhost:8000/auth/testjwt
+
+POST http://192.168.68.103:8080/auth/testjwt
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQiLCJpYXQiOjE2MDcwMDE3NDIsImV4cCI6MTYwNzAwMjY0Mn0.DKLM1IwCXQyf2iqzLkPa5GG97SSxSeJmKzdRRVWkXsU
 Content-Type: application/json
 
 {
      "id":"1234",
-    "refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQiLCJpYXQiOjE2MDcyNzU4MzMsImV4cCI6MTYwOTg2NzgzM30.PMFDTsaeFKW29Gys5dkq3MYUm8SS55HoJevG3ABfiHU"
+    "refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQiLCJpYXQiOjE2MDc2NDQ0NTcsImV4cCI6MTYxMDIzNjQ1N30.sSrbAog-8fy3aEKib_wjIjxwI350KPG73Od9eqsMCBk"
 }
 
 ###

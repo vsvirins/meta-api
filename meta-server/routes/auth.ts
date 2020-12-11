@@ -75,7 +75,7 @@ router.get(
       // user.id
       const user = {id: '1234'};
 
-      const response = await Axios.post('http://localhost:9090/login', {id: user.id});
+      const response = await Axios.post('http://auth-server:9090/login', {id: user.id});
       if (response.status != 201) return res.sendStatus(401);
       const tokens = response.data;
 
