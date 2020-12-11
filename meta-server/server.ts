@@ -22,11 +22,11 @@ connect(process.env.DB_URI || 'mongodb://localhost:27017/meta-api', {
   const PORT = process.env.PORT || 8080
 
   // Routes
-  app.use('/:user_name/projects', paramsHack, projectRoutes)
-  app.use('/projects', projectRoutes)
+  app.use('/generator/:user_name/projects', paramsHack, projectRoutes)
+  app.use('/generator/projects', projectRoutes)
 
-  app.use('/:user_name/projects/:project_name/endpoints', paramsHack, endpointRoutes)
-  app.use('/endpoints', endpointRoutes)
+  app.use('/generator/:user_name/projects/:project_name/endpoints', paramsHack, endpointRoutes)
+  app.use('/generator/endpoints', endpointRoutes)
 
   app.use('/api', genericRoutes)
 
