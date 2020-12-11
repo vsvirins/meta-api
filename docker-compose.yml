@@ -6,8 +6,8 @@ services:
     image: mongo
     restart: always
     command: mongod --quiet
-    env_file:
-      - mongo-variables.env
+    # env_file:
+    #   - mongo-variables.env
 
   mongo-express:
     container_name: MA_mongo-express
@@ -17,30 +17,27 @@ services:
       - 8081:8081
     depends_on:
       - mongo
-    env_file:
-      - mongo-variables.env
+    # env_file:
+    #   - ./.env/mongo-variables.env
 
-  # server:
-  #   stdin_open: true
-  #   container_name: MA_frontend_server
-  #   image: node
-  #   volumes:
-  #     - ../frontend:/usr/src/app:z
-  #     - '/app/node_modules'
-  #   ports:
-  #     - 3080:3000
-  #   command: npm run build
-
-  frontend:
-    container_name: frontend
-    build:
-      context: ./
-      dockerfile: ./frontend/Dockerfile
+  meta-server:
+    container_name: MA_meta-server
+    build: ./meta-server
     volumes:
-      - './frontend/:/app'
-      - './frontend/app/node_modules'
+      - ./meta-server:/usr/src/app:z
     ports:
-      - 3001:3000
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-    stdin_open: true
+      - 8080:8080
+    env_file:
+      - ./.env/meta-server.env
+    command: bash -c "npm i && npm run dev"
+
+  auth-server:
+    container_name: MA_auth-server
+    build: ./auth-server
+    volumes:
+      - ./auth-server:/usr/src/app:z
+    ports:
+      - 9090:9090
+    env_file:
+      - ./.env/auth-server.env
+    command: bash -c "npm i && npm run dev"

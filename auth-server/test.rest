@@ -1,0 +1,27 @@
+
+POST http://192.168.68.103:9090/login
+Content-Type: application/json
+
+
+{
+    "id":"4322"
+}
+
+###
+
+POST http://localhost:9090/token
+Content-Type: application/json
+
+{
+    "id":"4322",
+    "refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQiLCJpYXQiOjE2MDc2NDQxMzksImV4cCI6MTYxMDIzNjEzOX0.rXrYPqlIEtyax0VHE7zjzvpbPTZHvBbRsarzvU3m9Dk"
+}
+
+###
+
+DELETE http://localhost:9090/logout
+Content-Type: application/json
+
+{
+    "id":"4322"
+}

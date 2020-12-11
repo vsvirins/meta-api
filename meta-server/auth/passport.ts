@@ -1,25 +1,20 @@
 import passport from 'passport';
-import github2 from 'passport-github2';
-//os.getenv('CLIENT_ID') etc
-import {VerifyCallback} from 'passport-oauth2';
+import gitHubStrategy from './gitHubStrategy';
 
-const CLIENT_ID = 'client';
-const CLIENT_SECRET = 'secret';
-const CALLBACK_URL = 'http://localhost';
+const passportSetup = {
+  // Initilizes the passport strategies.
+  init: () => {
+    gitHubStrategy.init();
+  },
+};
 
-passport.use(
-  new github2.Strategy(
-    {
-      clientID: CLIENT_ID,
-      clientSecret: CLIENT_SECRET,
-      callbackURL: CALLBACK_URL,
-    },
-    (accessToken: string, refreshToken: string, profile: any, done: VerifyCallback) => {
-      console.log(accessToken);
+// Functions needed to serialize and return the user profile from 3rd party OAuth services.
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
 
-      //   User.findOrCreate({githubId: profile.id}, (err, user) => {
-      //     return done(err, user);
-      //   });
-    }
-  )
-);
+passport.deserializeUser((obj, done) => {
+  done(null, obj);
+});
+
+export default passportSetup;
