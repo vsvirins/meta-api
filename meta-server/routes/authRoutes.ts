@@ -2,8 +2,14 @@ import Axios from 'axios'
 import Router from 'express'
 import passport from 'passport'
 import authenticate from '../middleware/authenticate'
+import User from '../models/UserModel'
 
 const router = Router()
+
+/**
+ * @todo
+ * Auth Controller
+ */
 
 /***
  * @name auth/login
@@ -63,19 +69,29 @@ router.get('/github', passport.authenticate('github', {scope: ['user:email']}))
  * Contains the Access Token and Refresh Token
  *
  * @todo
+ * Create interface for req.user data
  * Function to check if user exists/create a new user.
  * Secure the refresh token in a 'safe cookie' (can't remeber what it's called)
  */
+
 router.get(
   '/github/callback',
   passport.authenticate('github', {failureRedirect: '/login'}),
-  async (req, res) => {
+  async (req: any, res) => {
     try {
-      // User.findOrCreate()
-      // user.id
-      const user = {id: '1234'}
+      //const fullName = req.user.displayName
+      const username = req.user.username
+      let user
 
-      const response = await Axios.post('http://auth-server:9090/login', {id: user.id})
+      // User.findOrCreate()
+      const userExists = await User.exists({username})
+      if (!userExists) {
+        user = await new User({username}).save()
+      } else {
+        user = await User.findOne({username})
+      }
+
+      const response = await Axios.post('http://auth-server:9090/login', {id: user!.id})
       if (response.status != 201) return res.sendStatus(401)
       const tokens = response.data
 

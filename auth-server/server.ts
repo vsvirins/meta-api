@@ -32,6 +32,7 @@ app.use('/', router)
 connect(DB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useFindAndModify: false,
 })
   .then(() =>
     app.listen(PORT, () => {

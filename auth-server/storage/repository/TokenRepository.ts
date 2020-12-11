@@ -72,7 +72,13 @@ class TokenRepository {
    */
   async storeRefreshToken(token: string, id: string) {
     const hashedToken = await crypto.hash(token)
-    new Token({id, refreshToken: hashedToken}).save()
+
+    const userExists = await this.checkIfUserExsists(id)
+    if (!userExists) {
+      await new Token({id, refreshToken: hashedToken}).save()
+    } else {
+      await Token.findOneAndUpdate({id}, {refreshToken: hashedToken})
+    }
   }
 }
 
