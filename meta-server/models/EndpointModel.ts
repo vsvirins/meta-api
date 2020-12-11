@@ -9,7 +9,11 @@ export const schema = new Schema({
     message: { type: String, required: true },
     method: { type: String, required: true }
   }],
-  fields: { type: Schema.Types.Mixed, required: true }
+  fields: [{
+    name: { type: String, required: true },
+    type: { type: String, required: true },
+    required: { type: Boolean, required: true }
+  }]
 })
 
 const model: Model<EndpointModelInterface> = connection.model("Endpoints", schema)

@@ -14,11 +14,12 @@ class EndpointController {
       const endpoint_name: string = req.body.endpoint_name
       const allowed_methods: string[] = req.body.allowed_methods
       const responses: { status: number, message: string, method: string }[] = req.body.responses
-      const fields: any = req.body.fields
+      const fields: { name: string, type: string, required: boolean }[] = req.body.fields
 
       if (
         [user_name, project_name, endpoint_name, allowed_methods, responses, fields].some(val => val === undefined) ||
-        !Array.isArray(responses) || Object.keys(fields).length === 0
+        !Array.isArray(responses) || !Array.isArray(fields) || fields.length === 0 ||
+        fields.some(field => field.name === undefined || field.type === undefined || field.required === undefined)
       ) {
         return res.status(400).send({
           error: {
@@ -236,11 +237,12 @@ class EndpointController {
       const project_name: string = req.body.project_name
       const endpoint_name: string = req.params.endpoint_name
       const responses: { status: number, message: string, method: string }[] = req.body.responses
-      const fields: any = req.body.fields
+      const fields: { name: string, type: string, required: boolean }[] = req.body.fields
 
       if (
         [user_name, project_name, endpoint_name, responses, fields].some(val => val === undefined) ||
-        !Array.isArray(responses) || Object.keys(fields).length === 0
+        !Array.isArray(responses) || !Array.isArray(fields) || fields.length === 0 ||
+        fields.some(field => field.name === undefined || field.type === undefined || field.required === undefined)
       ) {
         return res.status(400).send({
           error: {

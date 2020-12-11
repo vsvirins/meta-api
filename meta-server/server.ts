@@ -6,6 +6,7 @@ import { connect } from 'mongoose'
 
 import projectRoutes from './routes/projectRoutes'
 import endpointRoutes from './routes/endpointRoutes'
+import genericRoutes from './routes/genericRoutes'
 import paramsHack from './middleware/paramsHack'
 
 // Configs and middleware
@@ -26,6 +27,8 @@ connect(process.env.DB_URI || 'mongodb://localhost:27017/meta-api', {
 
   app.use('/:user_name/projects/:project_name/endpoints', paramsHack, endpointRoutes)
   app.use('/endpoints', endpointRoutes)
+
+  app.use('/api', genericRoutes)
 
   // Connect to DB and start the server
   app.listen(PORT, () => console.log(`⚡️[meta-server] Listening on port ${PORT}`))
