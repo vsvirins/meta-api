@@ -1,17 +1,15 @@
-import cors from 'cors';
-import express from 'express';
-import morgan from 'morgan';
-import passport from 'passport';
-import passportSetup from './auth/passport';
-
-import { connect } from 'mongoose'
-
-import auth from './routes/auth'
-import projectRoutes from './routes/projectRoutes'
+import cors from 'cors'
+import express from 'express'
+import {connect} from 'mongoose'
+import morgan from 'morgan'
+import passport from 'passport'
+import passportSetup from './auth/passport'
+import authenticate from './middleware/authenticate'
+import paramsHack from './middleware/paramsHack'
+import authRoutes from './routes/authRoutes'
 import endpointRoutes from './routes/endpointRoutes'
 import genericRoutes from './routes/genericRoutes'
-import paramsHack from './middleware/paramsHack'
-
+import projectRoutes from './routes/projectRoutes'
 
 /**
  * @Constants
@@ -33,13 +31,18 @@ app.use(passport.initialize())
 /***
  * @Routes
  */
-app.use('/auth', auth)
+app.use('/auth', authRoutes)
 
-app.use('/generator/:user_name/projects', paramsHack, projectRoutes)
+app.use('/generator/:user_name/projects', authenticate, paramsHack, projectRoutes)
 app.use('/generator/projects', projectRoutes)
 
-app.use('/generator/:user_name/projects/:project_name/endpoints', paramsHack, endpointRoutes)
-app.use('/generator/endpoints', endpointRoutes)
+app.use(
+  '/generator/:user_name/projects/:project_name/endpoints',
+  authenticate,
+  paramsHack,
+  endpointRoutes
+)
+app.use('/generator/endpoints', authenticate, endpointRoutes)
 
 app.use('/api', genericRoutes)
 
@@ -48,9 +51,11 @@ app.use('/api', genericRoutes)
  */
 connect(DB_URI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => {
-  app.listen(PORT, HOST, () => console.log(`⚡️[meta-server] Listening on port ${PORT}`))
-}).catch(e => {
-  console.error("Couldn't start server. A database error occured while connecting!")
+  useUnifiedTopology: true,
 })
+  .then(() => {
+    app.listen(PORT, HOST, () => console.log(`⚡️[meta-server] Listening on port ${PORT}`))
+  })
+  .catch(e => {
+    console.error("Couldn't start server. A database error occured while connecting!")
+  })

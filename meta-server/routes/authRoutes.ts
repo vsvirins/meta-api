@@ -1,9 +1,9 @@
-import Axios from 'axios';
-import Router from 'express';
-import passport from 'passport';
-import authenticate from '../middleware/authenticate';
+import Axios from 'axios'
+import Router from 'express'
+import passport from 'passport'
+import authenticate from '../middleware/authenticate'
 
-const router = Router();
+const router = Router()
 
 /***
  * @name auth/login
@@ -13,8 +13,8 @@ const router = Router();
  * login page lol
  */
 router.get('/login', (req, res) => {
-  res.send('login screen');
-});
+  res.send('login screen')
+})
 
 /***
  * @name auth/logout
@@ -31,20 +31,20 @@ router.delete('/logout', authenticate, async (req, res) => {
       data: {
         id: req.body.id,
       },
-    });
-    if (response.status !== 204) return res.sendStatus(500);
-    res.sendStatus(204);
+    })
+    if (response.status !== 204) return res.sendStatus(500)
+    res.sendStatus(204)
   } catch (error) {
-    res.sendStatus(500);
+    res.sendStatus(500)
   }
-});
+})
 
 /***
  * @name auth/github
  * Authenticates the user via 3rd party OAuth service GitHub.
  * Redirects to /auth/github/callback.
  */
-router.get('/github', passport.authenticate('github', {scope: ['user:email']}));
+router.get('/github', passport.authenticate('github', {scope: ['user:email']}))
 
 /***
  * @name auth/github/callback
@@ -73,23 +73,23 @@ router.get(
     try {
       // User.findOrCreate()
       // user.id
-      const user = {id: '1234'};
+      const user = {id: '1234'}
 
-      const response = await Axios.post('http://auth-server:9090/login', {id: user.id});
-      if (response.status != 201) return res.sendStatus(401);
-      const tokens = response.data;
+      const response = await Axios.post('http://auth-server:9090/login', {id: user.id})
+      if (response.status != 201) return res.sendStatus(401)
+      const tokens = response.data
 
-      res.status(201).json(tokens);
+      res.status(201).json(tokens)
     } catch (error) {
-      console.error(error);
-      res.sendStatus(500);
+      console.error(error)
+      res.sendStatus(500)
     }
   }
-);
+)
 
 router.post('/testjwt', authenticate, (req, res) => {
-  console.log(req.body);
-  res.send('Access approved');
-});
+  console.log(req.body)
+  res.send('Access approved')
+})
 
-export default router;
+export default router
