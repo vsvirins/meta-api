@@ -1,11 +1,11 @@
-import Router from 'express';
-import TokenController from './controllers/TokenController';
+import Router from 'express'
+import TokenController from './controllers/TokenController'
 
-const tc = new TokenController();
-const router = Router();
+const tc = new TokenController()
+const router = Router()
 
-router.post('/login', tc.login);
-router.post('/refresh', tc.generateNewAccessToken);
-router.delete('/logout', tc.logout);
+router.post('/login', tc.login)
+router.post('/refresh', tc.generateNewAccessToken)
+router.delete('/logout', tc.logout)
 
-export default router;
+export default router

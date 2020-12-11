@@ -1,20 +1,20 @@
-import dotenv from 'dotenv';
-import * as jwt from 'jsonwebtoken';
-import Crypto from '../../modules/Crypto';
-import Token from '../models/Token';
-dotenv.config();
-const crypto = new Crypto();
+import dotenv from 'dotenv'
+import * as jwt from 'jsonwebtoken'
+import Crypto from '../../modules/Crypto'
+import Token from '../models/Token'
+dotenv.config()
+const crypto = new Crypto()
 
 class TokenRepository {
-  private _accesKey: string = process.env.JWT_SECRET!;
-  private _refreshKey: string = process.env.JWT_REFRESH_SECRET!;
+  private _accesKey: string = process.env.JWT_SECRET!
+  private _refreshKey: string = process.env.JWT_REFRESH_SECRET!
 
   createAccessToken(id: string) {
-    return jwt.sign({id}, this._accesKey, {expiresIn: '15m'});
+    return jwt.sign({id}, this._accesKey, {expiresIn: '15m'})
   }
 
   createRefreshToken(id: string) {
-    return jwt.sign({id}, this._refreshKey, {expiresIn: '30d'});
+    return jwt.sign({id}, this._refreshKey, {expiresIn: '30d'})
   }
 
   /**
@@ -23,7 +23,7 @@ class TokenRepository {
    * @returns - An object containing the access & refresh tokens.
    */
   createTokens(id: string) {
-    return {accessToken: this.createAccessToken(id), refreshToken: this.createRefreshToken(id)};
+    return {accessToken: this.createAccessToken(id), refreshToken: this.createRefreshToken(id)}
   }
 
   /**
@@ -32,12 +32,12 @@ class TokenRepository {
    * @returns - True if the user exsists, otherwise false -duh-
    */
   async checkIfUserExsists(id: string): Promise<boolean> {
-    return await Token.exists({id});
+    return await Token.exists({id})
   }
 
   async compareRefreshTokens(id: string, refreshToken: string): Promise<boolean | void> {
-    const target = await Token.findOne({id});
-    return await crypto.verify(target!.refreshToken, refreshToken);
+    const target = await Token.findOne({id})
+    return await crypto.verify(target!.refreshToken, refreshToken)
   }
 
   /**
@@ -53,8 +53,8 @@ class TokenRepository {
    */
   verifyRefreshToken(refreshToken: string, id: string, callback: jwt.VerifyCallback) {
     jwt.verify(refreshToken, this._refreshKey, (err, tokenInfo) => {
-      callback(err, tokenInfo);
-    });
+      callback(err, tokenInfo)
+    })
   }
 
   /**
@@ -62,7 +62,7 @@ class TokenRepository {
    * @param id - User id.
    */
   async deleteRefreshToken(id: string) {
-    await Token.deleteOne({id});
+    await Token.deleteOne({id})
   }
 
   /**
@@ -71,9 +71,9 @@ class TokenRepository {
    * @param id User's id.
    */
   async storeRefreshToken(token: string, id: string) {
-    const hashedToken = await crypto.hash(token);
-    new Token({id, refreshToken: hashedToken}).save();
+    const hashedToken = await crypto.hash(token)
+    new Token({id, refreshToken: hashedToken}).save()
   }
 }
 
-export default TokenRepository;
+export default TokenRepository

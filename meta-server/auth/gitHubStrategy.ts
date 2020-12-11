@@ -1,6 +1,6 @@
-import passport from 'passport';
-import GitHubStrategy from 'passport-github2';
-import {VerifyCallback} from 'passport-oauth2';
+import passport from 'passport'
+import GitHubStrategy from 'passport-github2'
+import {VerifyCallback} from 'passport-oauth2'
 
 /***
  * @name GitHubStrategy
@@ -32,10 +32,10 @@ const gitHubStrategy = {
           callbackURL: process.env.GITHUB_CALLBACK_URL!,
         },
         (_accessToken: string, _refreshToken: string, profile: any, done: VerifyCallback) => {
-          return done(null, profile);
+          return done(null, profile)
         }
       )
-    );
+    )
   },
-};
-export default gitHubStrategy;
+}
+export default gitHubStrategy

@@ -1,6 +1,6 @@
-import Axios from 'axios';
-import {NextFunction, Request, Response} from 'express';
-import jsonwebtoken, {TokenExpiredError} from 'jsonwebtoken';
+import Axios from 'axios'
+import {NextFunction, Request, Response} from 'express'
+import jsonwebtoken, {TokenExpiredError} from 'jsonwebtoken'
 
 /***
  * @name authenticate
@@ -43,40 +43,40 @@ import jsonwebtoken, {TokenExpiredError} from 'jsonwebtoken';
  */
 
 type Token = {
-  id: number;
-  iat: number;
-  exp: number;
-};
+  id: number
+  iat: number
+  exp: number
+}
 
 const authenticate = (req: Request, res: Response, next: NextFunction) => {
   if (!req.headers.authorization || !req.body.id || !req.body.refreshToken)
-    return res.sendStatus(401);
+    return res.sendStatus(401)
 
-  const id = req.body.id;
-  const accessToken = req.headers.authorization.split(' ')[1];
-  const refreshToken = req.body.refreshToken;
+  const id = req.body.id
+  const accessToken = req.headers.authorization.split(' ')[1]
+  const refreshToken = req.body.refreshToken
 
   jsonwebtoken.verify(accessToken, process.env.JWT_SECRET!, async (err, token: Token | any) => {
     try {
-      if (token && token.id !== id) return res.sendStatus(401);
+      if (token && token.id !== id) return res.sendStatus(401)
 
       if (err) {
         if (err instanceof TokenExpiredError) {
-          const response = await Axios.post('http://auth-server:9090/refresh', {id, refreshToken});
-          if (response.status !== 201) return res.sendStatus(response.status);
-          req.body.accessToken = response.data;
-          next();
+          const response = await Axios.post('http://auth-server:9090/refresh', {id, refreshToken})
+          if (response.status !== 201) return res.sendStatus(response.status)
+          req.body.accessToken = response.data
+          next()
         } else {
-          return res.sendStatus(401);
+          return res.sendStatus(401)
         }
       }
-      req.body.accessToken = accessToken;
-      next();
+      req.body.accessToken = accessToken
+      next()
     } catch (error) {
-      console.error(error);
-      res.sendStatus(401);
+      console.error(error)
+      res.sendStatus(401)
     }
-  });
-};
+  })
+}
 
-export default authenticate;
+export default authenticate
