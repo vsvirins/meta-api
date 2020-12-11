@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import Router from 'express';
 import passport from 'passport';
-import authenticate from '../auth/authenticate';
+import authenticate from '../middleware/authenticate';
 
 const router = Router();
 
